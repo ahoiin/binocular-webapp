@@ -1,0 +1,12 @@
+# Misc nodejs ignores
+node_modules
+browser-bundle.js
+browser-bundle.min.js
+npm-debug.log
+*~
+
+# npm package
+*.tgz
+
+# OSX
+.DS_Store
