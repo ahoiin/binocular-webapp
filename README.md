@@ -2,7 +2,7 @@
 
 ## Usage
 
-     git clone https://github.com/ahoiin/binocular-app
+     git clone https://github.com/ahoiin/binocular-webapp
      cd binocular-webapp
      npm install
 
