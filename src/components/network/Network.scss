@@ -1,0 +1,11 @@
+.network {
+  position:relative;
+  svg {
+  	z-index: 1;
+  	position: absolute;
+  }
+  .canvas {
+  		margin: 0px;
+	  	position: absolute;
+	}
+}
