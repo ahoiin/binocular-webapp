@@ -1,0 +1,33 @@
+
+
+.Select {
+	z-index: 100;
+	width: 300px;
+    margin: 0 auto;
+
+    .Select-control {
+	    background-color: inherit;
+	    border: none;
+	    border-radius: 0px;
+	    color: #333;
+	    cursor: default;
+	    display: table;
+	    height: 36px;
+	    outline: none;
+	    overflow: hidden;
+	    position: relative;
+	    width: 100%;
+	    font-size: 14px;
+	    box-shadow: none !important;
+	    &:hover {
+
+	    }
+
+	}
+
+	.Select-option {
+		padding: 10px 12px;
+		font-size: 13px;
+	}
+
+}

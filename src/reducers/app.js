@@ -14,31 +14,74 @@ export default app(
 
   {
 
-
-    [ types.INIT ] (state, action) {
+    [ types.LOAD_DATA ] (state, action) {
       return {
         ...state,
-        nodes: action.nodes,
-        links: action.links,
-        biLinks: action.biLinks,
-        xDomain: action.xDomain,
-        yDomain: action.yDomain,
-        valNodesDomain: action.valNodesDomain,
-        valLinksDomain: action.valLinksDomain,
-        scale_node: action.scale_node,
-        scale_link: action.scale_link
+        data_ra: action.data_ra,
+        data_rc: action.data_rc
+      }
+    },
+
+
+    [ types.INIT ] (state, action) {
+      let ra = _.clone(state.ra);
+      let rc = _.clone(state.rc);
+
+      if(action.type_ == "ra") {
+        ra.nodes = action.nodes,
+        ra.links = action.links,
+        ra.biLinks = action.biLinks,
+        ra.xDomain = action.xDomain,
+        ra.yDomain = action.yDomain,
+        ra.valNodesDomain = action.valNodesDomain,
+        ra.valLinksDomain = action.valLinksDomain,
+        ra.scale_node = action.scale_node,
+        ra.scale_link = action.scale_link
+      } else {
+        rc.nodes = action.nodes,
+        rc.links = action.links,
+        rc.biLinks = action.biLinks,
+        rc.xDomain = action.xDomain,
+        rc.yDomain = action.yDomain,
+        rc.valNodesDomain = action.valNodesDomain,
+        rc.valLinksDomain = action.valLinksDomain,
+        rc.scale_node = action.scale_node,
+        rc.scale_link = action.scale_link
+      }
+      return {
+        ...state,
+        ra: ra,
+        rc: rc
       }
     },
 
 
     [ types.INTERACTION ] (state, action) {
-      console.log(action.selected_ids_obj);
+      let ra = _.clone(state.ra);
+      let rc = _.clone(state.rc);
+
+      if(action.type_ == "ra") {
+        ra.selected_ids = action.selected_ids
+      } else {
+        rc.selected_ids = action.selected_ids
+      }
+      rc.selected_ids_others = action.selected_ids_others.rc
+      ra.selected_ids_others = action.selected_ids_others.ra
+
       return {
         ...state,
-        selected_ids: action.selected_ids,
-        selected_ids_obj: action.selected_ids_obj,
-        selected_ids_others: action.selected_ids_others
-      }
+        hover: action.hover_id,
+        ra: ra,
+        rc: rc
+      };
+    },
+
+    [ types.CLICKED_TOGGLE ] (state, action) {
+      console.log(action.clicked);
+      return {
+        ...state,
+        clicked: action.clicked
+      };
     }
 
 

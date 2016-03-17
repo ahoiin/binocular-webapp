@@ -8,11 +8,12 @@ class NetworkLines extends Component {
 
 	// -------------------------- renderCanvas: Links
 	_renderCanvas = () => {
-	    if(!this.refs.scatter) return;
+		let scatter = this.props.type=="ra" ? this.refs.scatter_ra : this.refs.scatter_rc
+	    if(!scatter) return;
 
-	    let ctx = this.refs.scatter.refs.canvas.getContext('2d');
-    	let { width, height, margin } = this.props
-    	let { nodes, links, biLinks, selected_ids } = this.props.app
+	    let ctx = scatter.refs.canvas.getContext('2d');
+    	let { width, height, margin, nodes, links, biLinks, selected_ids, selected_ids_others } = this.props
+
 	    var that = this
 
 	    ctx.clearRect(0,0,width,height);
@@ -22,10 +23,13 @@ class NetworkLines extends Component {
 	            dy = d[2].y - d[0].y,
 	            dr = Math.sqrt(dx * dx + dy * dy);
 
-	        // if sth selected show it and other lines not
-            var status = selected_ids.length > 0 ? (_.indexOf(selected_ids, d[3] ) >= 0 || _.indexOf(selected_ids, d[4] ) >= 0 ? true : false ) : true
+	        // show/hide line based if its node has been selected and another related node, too
+	        // show connection of connections, too
+            // var status = selected_ids.length > 0 && selected_ids_others.length > 0 ? ( (_.indexOf(selected_ids, d[3]) >= 0 || _.indexOf(selected_ids_others, d[3]) >= 0) && (_.indexOf(selected_ids, d[4]) >= 0 || _.indexOf(selected_ids_others, d[4])) >= 0  ? true : false ) : false
+            var status = selected_ids.length > 0 && selected_ids_others.length > 0 ? ( _.indexOf(selected_ids, d[3]) >= 0 || _.indexOf(selected_ids, d[4]) >= 0  ? true : false ) : false
 
-	        if(status)that._drawArc(d, dr, ctx);
+
+	        if(status) that._drawArc(d, dr, ctx);
 	    })
 
 	  }
@@ -64,15 +68,16 @@ class NetworkLines extends Component {
 
 		ctx.beginPath();
 		ellipse(x1, y1, x2, y2, dr, true)
-		ctx.strokeStyle = 'rgba(62,190,255,0.3)';
+		ctx.strokeStyle = this.props.type == "ra" ? 'rgba(62,190,255,0.4)' : 'rgba(82,231,150,0.4)';
 		ctx.lineWidth = 1;
 		ctx.stroke();
 
 	}
 
 	_retinaCheck = ()  => {
-		if(!this.refs.scatter) return;
-		let canvas = document.querySelector('canvas')
+		let scatter = this.props.type=="ra" ? this.refs.scatter_ra : this.refs.scatter_rc
+		if(!scatter) return;
+		let canvas = scatter.refs.canvas;
 		let ctx = canvas.getContext('2d');
 
 		if (window.devicePixelRatio > 1) {
@@ -94,11 +99,11 @@ class NetworkLines extends Component {
 
 
 	render() {
-	    let { width, height, margin, nodes, links, biLinks } = this.props
+	    let { width, height, margin, type } = this.props
 
 		return (
 			<div>
-				<NetworkCanvas ref="scatter" margin={margin} width={width} height={height} />
+				<NetworkCanvas ref={ "scatter_" + type } margin={margin} width={width} height={height} />
 	        	{this._renderCanvas()}
         	</div>
 		)

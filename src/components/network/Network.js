@@ -16,7 +16,10 @@ class Network extends Component {
 
 
   componentWillReceiveProps(nextProps){
-    if(this.props.app.links.length == 0 && typeof nextProps.data.links != undefined)  this._resizeVis(nextProps);
+    let props = this.props.type=="ra" ? this.props.app.ra : this.props.app.rc
+    if( (props.links.length == 0 && typeof nextProps.data.links != undefined)
+      && (props.nodes.length == 0 && typeof nextProps.data.nodes != undefined)
+      || (this.props.app.data_ra != nextProps.app.data_ra) )  this._resizeVis(nextProps);
   }
 
 
@@ -59,7 +62,7 @@ class Network extends Component {
         biLinks.push([s, i, t, link.source, link.target]);
       })
 
-      this.props.init(nodes_, links, biLinks, xDomain, yDomain, valNodesDomain, valLinksDomain, d3.scale.sqrt().range([6,11]).nice(), d3.scale.sqrt().range([0,100]).nice());
+      this.props.init(this.props.type, nodes_, links, biLinks, xDomain, yDomain, valNodesDomain, valLinksDomain, d3.scale.sqrt().range([6,11]).nice(), d3.scale.sqrt().range([0,100]).nice());
     }
 
 
@@ -69,11 +72,14 @@ class Network extends Component {
 // -------------------------- render
 
   render() {
-    let { width, height, margin } = this.props
-    let { nodes, links, biLinks } = this.props.app
+    let { width, height, margin, interaction, clickedToggle, type } = this.props
+    let { clicked, hover } = this.props.app
+    let props = this.props.type=="ra" ? this.props.app.ra : this.props.app.rc
+    width = width - margin.left - margin.right
+    height = height - margin.top - margin.bottom
 
     return (
-      <div className="network" id="container_ra" >
+      <div className="network" >
 
         <Chart
           className="network__svg"
@@ -83,12 +89,13 @@ class Network extends Component {
         >
           <g transform={ "translate(" + margin.left + "," + margin.top + ")" }>
 
-            <NetworkNodes {...this.props} />
+            <NetworkNodes {...props} {...{width, height, margin, interaction, type, clicked, clickedToggle, hover}} />
           </g>
 
         </Chart>
 
-        <NetworkLines {...this.props} />
+        <NetworkLines {...props} {...{width, height, margin, interaction, type, clicked, clickedToggle, hover }} />
+
 
       </div>
 
