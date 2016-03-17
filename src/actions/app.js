@@ -2,11 +2,12 @@
 import * as types from '../constants'
 
 
-export function loadData(data_ra, data_rc) {
+export function loadData(data_ra, data_rc, active) {
   return {
     type: types.LOAD_DATA,
     data_ra: data_ra,
-    data_rc: data_rc
+    data_rc: data_rc,
+    active: active
   }
 }
 

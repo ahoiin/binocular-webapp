@@ -17,8 +17,10 @@ class Network extends Component {
 
   componentWillReceiveProps(nextProps){
     let props = this.props.type=="ra" ? this.props.app.ra : this.props.app.rc
-    if( (props.links.length == 0 && typeof nextProps.data.links != undefined)
-      && (props.nodes.length == 0 && typeof nextProps.data.nodes != undefined)
+    // if(typeof props.links != 'undefined')
+
+    if( (props.links.length == 0 && typeof nextProps.data.links != 'undefined')
+      && (props.nodes.length == 0 && typeof nextProps.data.nodes != 'undefined')
       || (this.props.app.data_ra != nextProps.app.data_ra) )  this._resizeVis(nextProps);
   }
 
@@ -28,7 +30,7 @@ class Network extends Component {
 
       let nodes = props.data.nodes;
       let links = props.data.links;
-      let { padding, width, height } = props;
+      let { padding, width, height, margin } = props;
 
       // calc scales
       let xDomain = [d3.min(nodes, function(d) {return +d.x; }), d3.max(nodes, function(d) { return +d.x; })]
@@ -36,13 +38,17 @@ class Network extends Component {
       let valNodesDomain = [d3.min(nodes, function(d) {return +d.val; }), d3.max(nodes, function(d) { return +d.val; })]
       let valLinksDomain = [d3.min(links, function(d) {return +d.val; }), d3.max(links, function(d) { return +d.val; })]
 
+      let scale_node = d3.scale.sqrt().domain(valNodesDomain).range([9,13]).nice()
+      let scale_link = d3.scale.sqrt().domain(valLinksDomain).range([0,5]).nice()
+
+
       var xScale = d3.scale.linear()
           .domain([xDomain[0], xDomain[1]])
-          .range([ padding, (width - padding)]);
+          .range([ margin.left, width - margin.right-margin.left]);
 
       var yScale = d3.scale.linear()
           .domain([yDomain[0], yDomain[1]])
-          .range([padding, (height - padding)]);
+          .range([0, height-margin.top-margin.bottom]);
 
       // save new x,y values for graphs
       let nodes_ = _.clone(nodes)
@@ -59,10 +65,10 @@ class Network extends Component {
         var s = nodes_[link.source],
             t = nodes_[link.target],
             i = {}; // intermediate node
-        biLinks.push([s, i, t, link.source, link.target]);
+        biLinks.push([s, i, t, link.source, link.target, link.val]);
       })
 
-      this.props.init(this.props.type, nodes_, links, biLinks, xDomain, yDomain, valNodesDomain, valLinksDomain, d3.scale.sqrt().range([6,11]).nice(), d3.scale.sqrt().range([0,100]).nice());
+      this.props.init(this.props.type, nodes_, links, biLinks, xDomain, yDomain, valNodesDomain, valLinksDomain, scale_node, scale_link );
     }
 
 
@@ -140,9 +146,9 @@ Network.propTypes = {
 Network.defaultProps = {
   width: 1000,
 	height: 800,
-  padding: 100,
+  padding: 30,
 	// data: [{"x":1,"y":8,"r":8,"c":8}, {"x":3,"y":2,"r":10,"c":2}],
-  margin: {top: 20, right: 25, bottom: 30, left: 40}
+  margin: {top: 40, right: 60, bottom: 40, left: 30}
  //  xVal: "x",
  //  yVal: "y",
  //  rVal: "r",

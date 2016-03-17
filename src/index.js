@@ -28,6 +28,7 @@ render(
 	<Router history={history}>
 	    <Route path="/" component={App}>
 	      <IndexRoute component={App}/>
+	      <Route path="/data/:dataset" component={App} />
 	    </Route>
     </Router>
   </Provider>,

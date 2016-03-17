@@ -15,10 +15,14 @@ export default app(
   {
 
     [ types.LOAD_DATA ] (state, action) {
+      let select = _.clone(state.select)
+      select.active = action.active
       return {
         ...state,
         data_ra: action.data_ra,
-        data_rc: action.data_rc
+        data_rc: action.data_rc,
+        select: select
+
       }
     },
 

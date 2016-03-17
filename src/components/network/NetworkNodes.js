@@ -64,7 +64,7 @@ _mouseOut() {
 
 
 	render() {
-    let { nodes, selected_ids, selected_ids_others, hover } = this.props
+    let { nodes, selected_ids, selected_ids_others, hover, scale_node } = this.props
     var that = this;
 
 		return (
@@ -84,7 +84,7 @@ _mouseOut() {
                     <text
                       dx="0"
                       dy="0.35"
-                      style={{ "fontSize": "12", "textAnchor": "middle" }} >
+                      style={{ "fontSize": scale_node(d.val), "textAnchor": "middle" }} >
 
                       {d.name}
 

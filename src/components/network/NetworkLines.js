@@ -69,7 +69,7 @@ class NetworkLines extends Component {
 		ctx.beginPath();
 		ellipse(x1, y1, x2, y2, dr, true)
 		ctx.strokeStyle = this.props.type == "ra" ? 'rgba(62,190,255,0.4)' : 'rgba(82,231,150,0.4)';
-		ctx.lineWidth = 1;
+		ctx.lineWidth = this.props.scale_link(d[5]);
 		ctx.stroke();
 
 	}
